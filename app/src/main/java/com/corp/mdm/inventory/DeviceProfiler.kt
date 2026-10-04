@@ -342,14 +342,16 @@ class DeviceProfiler(private val context: Context) {
     } catch (e: Exception) { null }
 
     @Suppress("DEPRECATION", "HardwareIds", "MissingPermission")
-    private fun imei(): String? = try {
+    private fun imei(): String? {
         val tm = telephony() ?: return null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            tm.imei?.ifBlank { null }
-        } else {
-            tm.deviceId?.ifBlank { null }
-        }
-    } catch (e: Exception) { null }
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                tm.imei?.ifBlank { null }
+            } else {
+                tm.deviceId?.ifBlank { null }
+            }
+        } catch (e: Exception) { null }
+    }
 
     private fun simState(): String = try {
         when (telephony()?.simState) {
@@ -386,18 +388,22 @@ class DeviceProfiler(private val context: Context) {
     private fun batteryIntent() =
         context.registerReceiver(null, IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED))
 
-    private fun batteryLevel(): Int = try {
+    private fun batteryLevel(): Int {
         val intent = batteryIntent() ?: return -1
-        val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-        val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-        if (level < 0 || scale <= 0) -1 else (level * 100 / scale)
-    } catch (e: Exception) { -1 }
+        return try {
+            val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            if (level < 0 || scale <= 0) -1 else (level * 100 / scale)
+        } catch (e: Exception) { -1 }
+    }
 
-    private fun batteryCharging(): Boolean = try {
+    private fun batteryCharging(): Boolean {
         val intent = batteryIntent() ?: return false
-        val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
-        status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
-    } catch (e: Exception) { false }
+        return try {
+            val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
+            status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
+        } catch (e: Exception) { false }
+    }
 
     private fun batteryHealth(): String = try {
         val intent = batteryIntent()

@@ -393,7 +393,7 @@ class DispatchService : Service() {
             .setOnlyAlertOnce(true).setOngoing(true).build()
     }
 
-    private fun startForeground(id: Int, notification: Notification) {
+    override fun startForeground(id: Int, notification: Notification) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val type = ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC or
                        ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
