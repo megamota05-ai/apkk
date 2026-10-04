@@ -10,7 +10,7 @@ object Config {
      *   - Internet (TLS):  wss://your-domain.com/ws
      * Must match what the Go server is listening on.
      */
-    const val SERVER_URL = "ws://192.168.1.100:8080/ws"
+    const val SERVER_URL = "ws://192.168.0.102:8080/ws"
 
     /**
      * JWT auth token that the Go server expects.
