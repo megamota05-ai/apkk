@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Device Admin policy — declara o que o admin pode fazer -->
+<!-- Sem device wipe/lock para manter o perfil de "gerenciamento corporativo" -->
+<device-admin xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-policies>
+        <!-- Impede desinstalação não autorizada via Settings -->
+        <force-lock />
+        <!-- Sem wipe remoto — fora do escopo -->
+    </uses-policies>
+</device-admin>
