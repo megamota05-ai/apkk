@@ -115,7 +115,7 @@ class DispatchService : Service() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        startForeground(NOTIF_ID, buildNotification())
+        startForegroundCompat(NOTIF_ID, buildNotification())
 
         cfg   = SecureConfig.getInstance(this)
         prefs = getSharedPreferences("fleet_prefs", Context.MODE_PRIVATE)
@@ -393,12 +393,12 @@ class DispatchService : Service() {
             .setOnlyAlertOnce(true).setOngoing(true).build()
     }
 
-    override fun startForeground(id: Int, notification: Notification) {
+    private fun startForegroundCompat(id: Int, notification: Notification) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val type = ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC or
                        ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
             startForeground(id, notification, type)
-        } else { super.startForeground(id, notification) }
+        } else { startForeground(id, notification) }
     }
 
     companion object {
