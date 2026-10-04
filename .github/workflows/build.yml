@@ -19,16 +19,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle 8.2
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.2'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-      - name: Show Android SDK path
-        run: echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" && echo "ANDROID_HOME=$ANDROID_HOME"
+      - name: Make gradlew executable
+        run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace 2>&1 | tail -60
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
